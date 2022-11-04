@@ -58,7 +58,7 @@ class AbstractPBEWithMD5AndDES(ABC):
         des = des_class.new(dk, DES.MODE_CBC, iv)
 
         # do the encryption
-        encrypted_text = des.encrypt(padded_text)
+        encrypted_text = des.encrypt(padded_text.encode('utf-8'))
 
         # return encrypted text prepended with salt, all base64-encoded
         return base64.b64encode(salt + encrypted_text)
@@ -125,7 +125,7 @@ class AbstractPBEWithMD5AndDES(ABC):
             position = message_length - pad_value
 
             # padding element, repeated `pad_value` number of times, as byte string
-            padding_elements = array.array('B', [pad_value] * pad_value).tostring()
+            padding_elements = array.array('B', [pad_value] * pad_value).tobytes()
 
             # check if correctly padded
             if pad_value == 0 or decrypted_message[-pad_value:] != padding_elements:
